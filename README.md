@@ -118,27 +118,39 @@ python -m http.server 5173
 Then open <http://localhost:5173>. A plain `file://` open also works in most browsers
 since there is no `fetch` — the content files are loaded as `<script>` tags.
 
-## Hosting on GitHub Pages
+## Live site
 
-The site is fully static — no build step, no server, no database — so GitHub Pages
-serves it as-is and it is free.
+**<https://onepointzero-edu.github.io/far-study-hub/>**
+
+Deployed from the `main` branch of
+<https://github.com/onepointzero-edu/far-study-hub>, root folder. The site is fully
+static — no build step, no server, no database — so GitHub Pages serves the files
+as-is, for free.
+
+### Publishing an update
+
+Everything on `main` is live within a minute or two of the push:
 
 ```bash
-git init
-git add .
-git commit -m "FAR Study Hub: Conceptual Framework chapter"
-git branch -M main
-git remote add origin https://github.com/<your-username>/far-study-hub.git
-git push -u origin main
+git add -A
+git commit -m "Add chapter D.1 Inventories"
+git push
 ```
 
-Then in the repository on GitHub: **Settings → Pages → Source: Deploy from a branch →
-`main` / `/ (root)` → Save.** The site appears at
-`https://<your-username>.github.io/far-study-hub/` within a minute or two.
+To confirm the build finished:
 
-Note that a public repository makes the lecture content public. If that is not wanted,
-GitHub Pages on a private repository requires a paid plan; the alternatives are
-Netlify or Cloudflare Pages, both free and both able to serve a private repo.
+```bash
+gh api repos/onepointzero-edu/far-study-hub/pages --jq .status
+```
+
+`built` means it is live. Students may need a hard refresh (Ctrl+Shift+R) to pick up
+a changed `app.js` or `styles.css`, since browsers cache them.
+
+### Note on visibility
+
+The repository is public, which is what GitHub Pages requires on a free plan — so the
+lecture content is publicly readable. If it ever needs to be private, Netlify and
+Cloudflare Pages both serve a private repo for free.
 
 ## Source material
 
