@@ -143,8 +143,22 @@ To confirm the build finished:
 gh api repos/onepointzero-edu/far-study-hub/pages --jq .status
 ```
 
-`built` means it is live. Students may need a hard refresh (Ctrl+Shift+R) to pick up
-a changed `app.js` or `styles.css`, since browsers cache them.
+`built` means it is live.
+
+### Cache busting
+
+Browsers cache `app.js`, `styles.css` and the content files hard, so a student can be
+left on an old copy after a push. Every local asset in `index.html` therefore carries a
+`?v=` token. Bump it whenever one of those files changed:
+
+```bash
+./bump.sh && git add -A && git commit -m "..." && git push
+```
+
+The token is just a timestamp; changing it makes the browser treat the file as a new
+URL and fetch it. Nothing needs bumping when only chapter *text* inside an already
+listed content file changed and you are happy to wait out the cache — but bumping is
+free, so bump anyway.
 
 ### Note on visibility
 
