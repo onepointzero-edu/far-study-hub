@@ -339,6 +339,14 @@ select{
   padding:24px clamp(20px,4vw,52px) 30px;
   font-size:13px;color:var(--grey);
 }
+.foot p{margin:0 0 7px;max-width:62ch}
+.foot p:last-child{margin-bottom:0}
+.betaTag{
+  display:inline-block;margin-right:7px;padding:1px 8px;
+  border:2px solid var(--ink);border-radius:999px;background:var(--yellow);
+  font-family:var(--disp);font-size:11px;font-weight:700;
+  letter-spacing:.04em;text-transform:uppercase;color:var(--ink);
+}
 
 /* below the two-column breakpoint the map becomes a horizontal timeline strip */
 @media(max-width:980px){
