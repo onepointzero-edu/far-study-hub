@@ -28,10 +28,10 @@
   --bad-s:#FFEAE6;
 
   --b:2px solid var(--ink);
-  --r-lg:30px;
-  --r-md:20px;
-  --r-sm:12.5px;
-  --r-xs:7.5px;
+  --r-lg:34px;
+  --r-md:22px;
+  --r-sm:14px;
+  --r-xs:10px;
   --pop:4px 4px 0 var(--ink);
 
   --disp:"Kodchasan",system-ui,sans-serif;
@@ -52,7 +52,7 @@ a{color:var(--orange);text-underline-offset:3px}
 
 /* ---------- the one big card ---------- */
 .app{
-  max-width:1920px;margin:0 auto;background:var(--paper);
+  max-width:1180px;margin:0 auto;background:var(--paper);
   border-radius:0;overflow:hidden;position:relative;
 }
 body.lessonView .app{background:transparent}
@@ -64,12 +64,12 @@ body.lessonView .app{background:transparent}
   padding:22px clamp(20px,4vw,52px);
   position:sticky;top:0;z-index:40;background:var(--paper);
 }
-.logo{font:700 clamp(22px,2.08vw,40px)/1 var(--disp);letter-spacing:-.01em;flex:0 0 auto;color:var(--black)}
+.logo{font:700 25px/1 var(--disp);letter-spacing:-.02em;flex:0 0 auto;color:var(--black)}
 .logo i{color:var(--orange);font-style:normal}
 .tabs{display:flex;gap:6px;margin:0 auto;flex-wrap:wrap;justify-content:center}
 .tabs button{
   background:none;border:0;padding:9px 16px;cursor:pointer;
-  font:400 clamp(14px,1.3vw,25px) var(--body);color:var(--black);border-radius:999px;
+  font:400 15px var(--body);color:var(--black);border-radius:999px;
   position:relative;white-space:nowrap;
 }
 .tabs button:hover{color:var(--orange)}
@@ -87,18 +87,17 @@ body.lessonView .app{background:transparent}
 
 /* ---------- hero ---------- */
 .hero{position:relative;padding:8px 0 34px;overflow:hidden}
-.hero .inner{position:relative;z-index:2;max-width:min(840px,56%)}
+.hero .inner{position:relative;z-index:2;max-width:760px}
 h1.display{
-  font:700 clamp(32px,4.17vw,80px)/1.14 var(--disp);
-  letter-spacing:-.02em;color:var(--black);margin:6px 0 18px;
+  font:700 clamp(32px,4.6vw,58px)/1.1 var(--disp);
+  letter-spacing:-.03em;color:var(--black);margin:0 0 18px;
 }
 h1.display em{color:var(--orange);font-style:normal}
-.sub{font:400 clamp(14px,1.56vw,30px)/1.5 var(--body);color:var(--black);
-  margin:0 0 30px;max-width:52ch}
+.sub{font:400 17px/1.6 var(--body);color:var(--black);margin:0 0 26px;max-width:460px}
 .cta-row{display:flex;align-items:center;gap:22px;flex-wrap:wrap}
 .btn{
   border:var(--b);border-radius:999px;background:var(--orange);color:var(--paper);
-  font:700 clamp(13px,1.15vw,22px) var(--body);padding:.6em 1.5em;cursor:pointer;
+  font:700 15px var(--body);padding:13px 26px;cursor:pointer;
   transition:transform .12s,box-shadow .12s;
 }
 .btn:hover{transform:translate(-2px,-2px);box-shadow:var(--pop)}
@@ -116,10 +115,7 @@ h1.display em{color:var(--orange);font-style:normal}
 /* decorative layer */
 .decor{position:absolute;inset:0;z-index:1;pointer-events:none}
 /* the artwork only has room to sit clear of the headline on wide viewports */
-@media(max-width:1100px){
-  .decor{display:none}
-  .hero .inner{max-width:840px}
-}
+@media(max-width:900px){.decor{display:none}}
 .decor svg{position:absolute}
 
 /* ---------- stat blocks ---------- */
@@ -136,7 +132,7 @@ h1.display em{color:var(--orange);font-style:normal}
   letter-spacing:.04em;text-transform:uppercase;
 }
 .stat .lbl{font:400 13px var(--body);color:var(--black);margin:10px 0 0}
-.stat .big{font:700 clamp(24px,2.08vw,40px)/1 var(--disp);letter-spacing:-.02em;margin-top:2px;color:var(--black)}
+.stat .big{font:700 33px/1 var(--disp);letter-spacing:-.03em;margin-top:2px;color:var(--black)}
 
 /* ---------- section headings ---------- */
 .kick{
@@ -162,6 +158,8 @@ h4{font:700 16px var(--body);margin:26px 0 8px}
 .grid{display:grid;gap:18px;grid-template-columns:repeat(auto-fill,minmax(300px,1fr))}
 /* the design's "Last viewed" rail, divided from "Available now" by a rule */
 .kickRow{display:flex;align-items:baseline;gap:22px}
+/* the home row is a fixed preview - three cards beside "Last viewed", four without */
+.grid.preview{grid-template-columns:repeat(auto-fit,minmax(210px,1fr))}
 .moreLink{
   background:none;border:0;padding:0;cursor:pointer;color:var(--black);
   font:400 11.5px var(--body);letter-spacing:.1em;text-transform:uppercase;
@@ -169,12 +167,12 @@ h4{font:700 16px var(--body);margin:26px 0 8px}
 }
 .moreLink:hover{color:var(--orange)}
 .rail{display:block}
-.railCol{max-width:360px}
-.grid.one{grid-template-columns:minmax(0,360px)}
+.railCol{max-width:300px}
+.grid.one{grid-template-columns:minmax(0,1fr)}
 @media(min-width:900px){
-  .rail{display:grid;grid-template-columns:320px minmax(0,1fr);gap:34px;align-items:start}
+  .rail{display:grid;grid-template-columns:300px minmax(0,1fr);gap:28px;align-items:start}
   /* the design divides the two columns with a vertical rule */
-  .railMain{border-left:2px solid var(--ink);padding-left:34px;min-width:0}
+  .railMain{border-left:2px solid var(--ink);padding-left:28px;min-width:0}
   .railCol .kick{margin-top:44px}
 }
 .railMain{min-width:0}
@@ -211,16 +209,16 @@ h4{font:700 16px var(--body);margin:26px 0 8px}
 }
 .back:hover{transform:translate(-2px,-2px);box-shadow:var(--pop)}
 /* ---------- lesson layout: chapter map + parts ---------- */
-.lesson{display:grid;grid-template-columns:300px minmax(0,1fr);gap:30px;align-items:start}
+.lesson{display:grid;grid-template-columns:272px minmax(0,1fr);gap:30px;align-items:start}
 .lessonBody{min-width:0}
 .lessonCol{min-width:0;display:flex;flex-direction:column}
 body.lessonView .lessonBody{
   background:var(--paper);border:var(--b);border-radius:var(--r-md);
-  padding:clamp(18px,2.4vw,34px);
+  padding:20px clamp(18px,3vw,26px);
 }
 body.lessonView .lessonHead{
   background:var(--paper);border:var(--b);border-radius:var(--r-md);
-  padding:clamp(18px,2.4vw,30px);margin-bottom:22px;
+  padding:20px clamp(18px,3vw,26px);margin-bottom:18px;
 }
 /* min-width:0 so the horizontal strip below 980px can scroll instead of
    forcing the grid — and the page — wider than the viewport */

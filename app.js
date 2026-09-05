@@ -128,7 +128,7 @@
         "<path d='M30 66 C12 66 4 55 8 44 C12 33 25 30 32 33 C34 16 50 8 64 12 C77 15 84 26 84 36 " +
         "C100 32 116 42 116 54 C116 62 109 66 100 66 Z' fill='#FFFFFF' stroke='#151513' stroke-width='4' stroke-linejoin='round'/>" +
       "</svg>" +
-      star(66, "56px", "330px", "#FCCC42") +
+      star(66, "72px", "286px", "#FCCC42") +
       star(30, "232px", "268px", "#FCCC42") +
       star(22, "18px", "196px", "#FF5734");
     return d;
@@ -202,9 +202,9 @@
     hero.appendChild(stats);
     root.appendChild(hero);
 
-    /* The design sets a single "Last viewed" card beside the "Available now"
-       grid, divided by a vertical rule. With nothing viewed yet the rail
-       collapses and the grid takes the full width. */
+    /* The home page is a shortcut, not a catalogue: the design shows one row,
+       so it previews three chapters beside the "Last viewed" card, or four
+       when nothing has been opened yet. "Explore more" opens the full list. */
     var last = lastSeen();
     var main = root;
     if (last) {
@@ -220,68 +220,88 @@
       root.appendChild(rail);
     }
 
-    /* available chapters */
     var kick = el("div", "kick kickRow");
     kick.appendChild(el("span", null, "Available now"));
     var more = el("button", "moreLink", "Explore more ↗");
-    more.onclick = function () {
-      var soon = document.getElementById("soon");
-      if (soon) soon.scrollIntoView({ block: "start" });
-    };
+    more.onclick = function () { go("chapters"); };
     kick.appendChild(more);
     main.appendChild(kick);
+
+    var grid = el("div", "grid preview");
+    previewChapters(last, last ? 3 : 4).forEach(function (it) {
+      grid.appendChild(chapterCard(it.c, it.i));
+    });
+    main.appendChild(grid);
+  }
+
+  /* Chapters still to finish come first, so the row stays useful as a student
+     progresses; completed ones top the row up if fewer than `n` remain. */
+  function previewChapters(exclude, n) {
+    var open = [], closed = [];
+    CHAPTERS.forEach(function (c, i) {
+      if (c === exclude) return;
+      (done(c.id).length < c.sections.length ? open : closed).push({ c: c, i: i });
+    });
+    return open.concat(closed).slice(0, n);
+  }
+
+  function chapterCard(c, i) {
+    var cleared = done(c.id).length, total = c.sections.length;
+    var pct = total ? Math.round(cleared / total * 100) : 0;
+    var hue = ["", " a3", " a2", " a4"][i % 4];   /* white, yellow, purple, coral */
+    var card = el("button", "ch" + hue);
+    card.appendChild(el("span", "chip", "TOS " + c.code));
+    card.appendChild(el("h3", null, c.title));
+    card.appendChild(el("p", null, c.blurb));
+    var bar = el("div", "bar"); var fill = el("i");
+    fill.style.width = pct + "%"; bar.appendChild(fill);
+    card.appendChild(bar);
+    card.appendChild(el("div", "pct", pct + "% completed"));
+    var meta = el("div", "meta");
+    meta.innerHTML = "<span><b>" + (c.flashcards || []).length + "</b> cards</span>" +
+      "<span><b>" + (c.quiz || []).length + "</b> quiz items</span>" +
+      "<span><b>" + c.minutes + "</b> mins</span>";
+    card.appendChild(meta);
+    card.onclick = function () { go("lesson", c.id); };
+    return card;
+  }
+
+  /* ---------------- ALL CHAPTERS ---------------- */
+  function viewChapters(root) {
+    var back = el("button", "back", "Home");
+    back.onclick = function () { go("home"); };
+    root.appendChild(back);
+
+    root.appendChild(el("h2", null, "All <em>chapters</em>"));
+    root.appendChild(el("p", "lede",
+      "Every chapter written so far, in teaching order, with what is still being " +
+      "drafted at the end. Chapters that belong to one topic are grouped together."));
 
     /* Chapters carrying the same `group` are rendered together under one
        heading, so a topic split across several chapters still reads as one. */
     var runs = [];
     CHAPTERS.forEach(function (c, i) {
-      var last = runs[runs.length - 1];
+      var prev = runs[runs.length - 1];
       /* consecutive chapters sharing a group - including the ungrouped ones,
          which share the single group `null` - go into the same grid */
-      if (last && last.group === (c.group || null)) last.items.push({ c: c, i: i });
+      if (prev && prev.group === (c.group || null)) prev.items.push({ c: c, i: i });
       else runs.push({ group: c.group || null, items: [{ c: c, i: i }] });
     });
 
+    root.appendChild(el("div", "kick", "Available now"));
     runs.forEach(function (run) {
       if (run.group) {
-        var n = run.items.length;
         var head = el("div", "groupHead");
         head.appendChild(el("h3", null, run.group));
-        head.appendChild(el("span", "groupCount", n + " chapters"));
-        main.appendChild(head);
+        head.appendChild(el("span", "groupCount", run.items.length + " chapters"));
+        root.appendChild(head);
       }
       var grid = el("div", "grid" + (run.group ? " grouped" : ""));
-      run.items.forEach(function (it) {
-        grid.appendChild(chapterCard(it.c, it.i));
-      });
-      main.appendChild(grid);
+      run.items.forEach(function (it) { grid.appendChild(chapterCard(it.c, it.i)); });
+      root.appendChild(grid);
     });
 
-    function chapterCard(c, i) {
-      var cleared = done(c.id).length, total = c.sections.length;
-      var pct = total ? Math.round(cleared / total * 100) : 0;
-      var hue = ["", " a3", " a2", " a4"][i % 4];   /* white, yellow, purple, coral */
-      var card = el("button", "ch" + hue);
-      card.appendChild(el("span", "chip", "TOS " + c.code));
-      card.appendChild(el("h3", null, c.title));
-      card.appendChild(el("p", null, c.blurb));
-      var bar = el("div", "bar"); var fill = el("i");
-      fill.style.width = pct + "%"; bar.appendChild(fill);
-      card.appendChild(bar);
-      card.appendChild(el("div", "pct", pct + "% completed"));
-      var meta = el("div", "meta");
-      meta.innerHTML = "<span><b>" + (c.flashcards || []).length + "</b> cards</span>" +
-        "<span><b>" + (c.quiz || []).length + "</b> quiz items</span>" +
-        "<span><b>" + c.minutes + "</b> mins</span>";
-      card.appendChild(meta);
-      card.onclick = function () { go("lesson", c.id); };
-      return card;
-    }
-
-    /* roadmap */
-    var soonKick = el("div", "kick", "Coming soon");
-    soonKick.id = "soon";
-    main.appendChild(soonKick);
+    root.appendChild(el("div", "kick", "Coming soon"));
     var g2 = el("div", "grid");
     FARHub.roadmap.forEach(function (r) {
       var c = el("div", "ch soon");
@@ -291,7 +311,7 @@
                                        : "Being written from the FAR lecture handouts."));
       g2.appendChild(c);
     });
-    main.appendChild(g2);
+    root.appendChild(g2);
   }
 
   /* ---------------- LESSON (scaffolded) ---------------- */
@@ -302,7 +322,7 @@
     markSeen(chId);
 
     var back = el("button", "back", "All chapters");
-    back.onclick = function () { go("home"); };
+    back.onclick = function () { go("chapters"); };
     root.appendChild(back);
 
     /* The design puts the title block in its own card above the two columns. */
@@ -752,10 +772,12 @@
     root.innerHTML = "";
     document.querySelectorAll(".tabs button").forEach(function (b) {
       var t = b.dataset.tab;
-      b.classList.toggle("on", t === tab || (tab === "lesson" && t === "home"));
+      b.classList.toggle("on", t === tab ||
+        ((tab === "lesson" || tab === "chapters") && t === "home"));
     });
     document.body.classList.toggle("lessonView", tab === "lesson");
     if (tab === "lesson") viewLesson(root, h[1]);
+    else if (tab === "chapters") viewChapters(root);
     else if (tab === "cards") viewCards(root);
     else if (tab === "quiz") viewQuiz(root);
     else if (tab === "about") viewAbout(root);

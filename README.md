@@ -49,13 +49,22 @@ hues rather than exported from the file.
 - **The nav "Continue" pill was removed** to match the design's nav, which is the logo
   plus four links. The hero's *Start Studying* button and the *Last viewed* card cover
   the same need.
+- **Type is set at the previous version's scale**, not the 1920 board's. Rendered at
+  the design's own ratios the page read as oversized at ordinary window widths, so the
+  sizes, radii, padding and 1180px content width from before the redesign are kept and
+  only the palette, typeface and layout are taken from the file.
 - **Responsive behaviour is not in the design**, which is desktop-only at 1920. The
   existing breakpoints are kept: below 980px the chapter map becomes a horizontal
   timeline strip, below 760px the nav wraps.
 
 ## Tabs
 
-- **Home** — chapter cards with progress. Opening one starts the scaffolded lesson.
+- **Home** — a shortcut, not a catalogue. It previews **three** chapters beside the
+  *Last viewed* card, or **four** when nothing has been opened yet, with unfinished
+  chapters first. *Explore more* opens the full list.
+- **All chapters** — every chapter in teaching order, grouped by topic, with the
+  roadmap at the end. Reached from *Explore more* and from the **All chapters** pill on
+  a lesson page. It has no nav tab of its own, matching the design's four-link nav.
 - **Flashcards** — active recall across all chapters or one chapter; flip and shuffle.
 - **Quiz** — exam conditions. No feedback until submission, then a full review with explanations.
 
