@@ -34,8 +34,18 @@ design exactly at 1920 and scales proportionally below it: the display line is `
 viewports stay readable.
 
 The layout, palette and component shapes follow the design. The decorative artwork
-(pencil, stars, cloud, arcs) is drawn fresh as inline SVG in `app.js` in the design's
-hues rather than exported from the file.
+(pencil, stars, cloud, rings) is **the illustration from the Penpot file**, exported to
+`assets/hero-illustration.svg` and scaled down to suit the page - the geometry is the
+original, only the display size changed.
+
+One thing had to be rebuilt on export: Penpot decomposes a stroked ellipse into a
+filled disc plus a heavy outline, which renders as two grey discs outside the editor.
+The two rings keep their original centres and radii but are re-declared as
+`fill:none` with a thin `#B1B2B5` stroke, which is what the design shows.
+
+The header is **static** - it scrolls away with the page. The chapter map on a lesson
+page is still sticky; note that this needs no `overflow:hidden` on any ancestor, since
+that silently disables `position:sticky`.
 
 ### Where the build departs from the design, and why
 

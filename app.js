@@ -100,37 +100,15 @@
 
   /* ---------------- decorative SVG ---------------- */
   /* Original shapes in the reference's flat, black-outlined style. */
-  function star(size, top, right, fill) {
-    return "<svg width='" + size + "' height='" + size + "' viewBox='0 0 100 100' " +
-      "style='top:" + top + ";right:" + right + "' aria-hidden='true'>" +
-      "<path d='M50 4 C56 34 66 44 96 50 C66 56 56 66 50 96 C44 66 34 56 4 50 C34 44 44 34 50 4 Z' " +
-      "fill='" + fill + "' stroke='#151513' stroke-width='4' stroke-linejoin='round'/></svg>";
-  }
+  /* The hero artwork is the illustration from the Penpot file, exported as
+     assets/hero-illustration.svg and scaled down to fit the page. */
   function heroDecor() {
     var d = el("div", "decor");
-    d.innerHTML =
-      /* sweeping outline arcs */
-      "<svg width='620' height='520' viewBox='0 0 620 520' style='top:-40px;right:-90px' aria-hidden='true'>" +
-        "<circle cx='330' cy='250' r='236' fill='none' stroke='#151513' stroke-width='1.5' opacity='.16'/>" +
-        "<circle cx='300' cy='276' r='188' fill='none' stroke='#151513' stroke-width='1.5' opacity='.12'/>" +
-      "</svg>" +
-      /* pencil */
-      "<svg width='300' height='300' viewBox='0 0 300 300' style='top:120px;right:60px' aria-hidden='true'>" +
-        "<g transform='rotate(-34 150 150)'>" +
-          "<rect x='72' y='128' width='168' height='46' rx='10' fill='#BE94F5' stroke='#151513' stroke-width='4'/>" +
-          "<path d='M72 128 L36 151 L72 174 Z' fill='#FFFFFF' stroke='#151513' stroke-width='4' stroke-linejoin='round'/>" +
-          "<path d='M52 140 L36 151 L52 162 Z' fill='#151513'/>" +
-          "<rect x='222' y='128' width='26' height='46' rx='9' fill='#FCCC42' stroke='#151513' stroke-width='4'/>" +
-        "</g>" +
-      "</svg>" +
-      /* cloud */
-      "<svg width='128' height='78' viewBox='0 0 128 78' style='top:262px;right:12px' aria-hidden='true'>" +
-        "<path d='M30 66 C12 66 4 55 8 44 C12 33 25 30 32 33 C34 16 50 8 64 12 C77 15 84 26 84 36 " +
-        "C100 32 116 42 116 54 C116 62 109 66 100 66 Z' fill='#FFFFFF' stroke='#151513' stroke-width='4' stroke-linejoin='round'/>" +
-      "</svg>" +
-      star(66, "72px", "286px", "#FCCC42") +
-      star(30, "232px", "268px", "#FCCC42") +
-      star(22, "18px", "196px", "#FF5734");
+    var img = document.createElement("img");
+    img.src = "assets/hero-illustration.svg";
+    img.alt = "";
+    img.setAttribute("aria-hidden", "true");
+    d.appendChild(img);
     return d;
   }
 
@@ -376,7 +354,9 @@
        prefers-reduced-motion and in some engines, so fall back to an instant jump. */
     function scrollToSec(target) {
       if (!target) return;
-      var navH = document.querySelector(".nav").offsetHeight;
+      /* the header is static, so it steals no space from the top of the viewport */
+      var navEl = document.querySelector(".nav");
+      var navH = getComputedStyle(navEl).position === "sticky" ? navEl.offsetHeight : 0;
       var tocH = getComputedStyle(toc).position === "sticky" && window.innerWidth <= 980
         ? toc.offsetHeight : 0;
       var y = Math.max(0, target.getBoundingClientRect().top + window.scrollY - navH - tocH - 14);
