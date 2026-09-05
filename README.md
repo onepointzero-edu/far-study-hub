@@ -168,6 +168,14 @@ Cloudflare Pages both serve a private repo for free.
 
 ## Source material
 
+The **Cash and Cash Equivalents** group (chapters C.1.1, C.1.2.1 and C.1.2.2) is drawn
+from the TSU FAR 0 lecture *Module 4 — Cash and Cash Equivalents* with its guided
+handouts *4A — Petty Cash Fund* and *4B — Bank Reconciliation and Proof of Cash*, and
+cites PAS 7, PAS 1, PAS 32 and Valix. The four chapters share one running case,
+**Zambales Trading Corporation**, taken from the Module 4 guided application. Three
+figures in those handouts were stale and are corrected on the site; the discrepancies
+and the reasoning are recorded in `CHAPTERS.md`.
+
 Chapter B.1 is drawn from the TSU FAR 0 lecture, *Module 2 — The Revised Conceptual
 Framework for Financial Reporting* (Week 4, CO2/CO4), which cites the IASB
 *Conceptual Framework for Financial Reporting* (2018), the FRSC adoption of

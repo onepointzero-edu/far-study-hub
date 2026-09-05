@@ -35,10 +35,10 @@ reconciliation and proof of cash are separate skills examined separately.
 | 3 | B.2 | Basic Accounting Concepts and the Accounting Cycle | ~1 | RETAIN | FAR 0 Module 1; Handout 20 |
 | 4 | B.1 | The Conceptual Framework for Financial Reporting | ~1 | RETAIN | ✅ **built** — needs B.1.4 additions, below |
 | 5 | B.1.4 | Presentation and Disclosure — Effective Communication | ~1 | **EXPAND** | FAR 0 Module 3; Handout 20 |
-| 6a | C.1.1 | Cash and Cash Equivalents | ~1 | RETAIN | ✅ **built** — 6 parts, 23 cards, 12 quiz items |
-| 6b | C.1.2.2 | The Petty Cash Fund | ↑ | RETAIN | ✅ **built** — 5 parts, 18 cards, 10 quiz items |
-| 6c | C.1.2.1 | The Bank Reconciliation Statement | ↑ | RETAIN | ✅ **built** — 5 parts, 18 cards, 12 quiz items |
-| 6d | — | Proof of Cash | 0 | OBTL only | ✅ **built** — 4 parts, 14 cards, 10 quiz items. **Not in the 2029 TOS** |
+| 6a | C.1.1 | Cash and Cash Equivalents | ~1 | RETAIN | ✅ **built** — 8 parts, 32 cards, 17 quiz items. Carries **Zambales Stages A and E** |
+| 6b | C.1.2.2 | The Petty Cash Fund | ↑ | RETAIN | ✅ **built** — 6 parts, 23 cards, 13 quiz items. Carries **Zambales Stage D1** |
+| 6c | C.1.2.1 | The Bank Reconciliation Statement | ↑ | RETAIN | ✅ **built** — 7 parts, 24 cards, 16 quiz items. Carries **Zambales Stage B** |
+| 6d | — | Proof of Cash | 0 | OBTL only | ✅ **built** — 6 parts, 22 cards, 15 quiz items. Carries **Zambales Stages C and D2**. **Not in the 2029 TOS** |
 | 7 | C.2.4 | Receivables and Receivable Financing | ~2 | RETAIN | Handout 2; FAR 0 |
 | 8 | D.1 | Inventories and Inventory Estimation | ~2 | RETAIN | Handout 3; FAR 0 |
 | 9 | D.5 | Biological Assets | ~1 | RETAIN | Handout 7 |
@@ -77,8 +77,58 @@ Each chapter follows the structure your own FAR 0 modules use:
    initial measurement through subsequent measurement and presentation to
    derecognition, split across gated stages so students work it progressively.
 
-The **Leases**, **Income Tax** and **Employee Benefits** chapters implement this in
-full. Still to retrofit: the **Conceptual Framework** and the **Cash** group.
+The **Leases**, **Income Tax**, **Employee Benefits** and **Cash** chapters implement
+this in full. Still to retrofit: the **Conceptual Framework**.
+
+### The Cash group's running case
+
+The four Cash chapters share one fact pattern, **Zambales Trading Corporation**, from
+the FAR 0 Module 4 guided application. It is the only case in the site that spans more
+than one chapter, so each chapter carries the stage matching its own skill and points
+to the others:
+
+| Stage | Question | Chapter |
+| --- | --- | --- |
+| **A** | Out of everything the ledger calls cash, what *is* cash? | Cash and Cash Equivalents |
+| **B** | What is the BPI current account really worth? | Bank Reconciliation |
+| **C** | Was the account clean for the whole month, not just at one date? | Proof of Cash |
+| **D1** | Is the petty cash fund intact? | Petty Cash Fund |
+| **D2** | Is any peso counted twice across two banks? | Proof of Cash |
+| **E** | What does the reader finally see? | Cash and Cash Equivalents |
+
+Stage A produces **P6,268,200**; Stage B produces an adjusted BPI balance of
+**P3,637,200**; Stage C reaches the same figure independently across December; Stage E
+joins them at **P6,725,400**, and carries the Stage D findings through to a fully
+corrected **P6,925,400** with a Metrobank overdraft of **P435,000**.
+
+#### Corrections made against the Module 4 source
+
+Three figures in the handouts were stale or inconsistent and have been corrected on the
+site. **The handouts themselves still need fixing.**
+
+1. **The note collection charge.** `Module 4 - Cash and Cash Equivalents v3.docx` states
+   **2,000**; the answer key and the teaching guide both use **2,500**, and only 2,500
+   makes the reconciliation balance and the proof of cash tie. The site uses **2,500**.
+2. **The petty cash count.** The problem places a customer's post-dated cheque of
+   **2,500** in the fund, but `Module 4 - Zambales Trading Answer Key.docx` omits it and
+   reports **NIL** shortage. Counting it gives accountability of 20,000 against 22,500
+   accounted for - an **overage of 2,500**. The Required explicitly asks for the entry
+   to record it, so NIL is the stale answer. The site reports the **overage**.
+3. **Transfer 1's bank dates.** The answer key's schedule shows Metrobank receiving on
+   **4 January**; the problem says **30 December**. On the problem's facts the diagnosis
+   is an outstanding cheque at BPI and **no** deposit in transit at Metrobank.
+
+Two further defects are flagged but not silently changed:
+
+- **The ledger control total.** Part A asserts a `Cash` account balance of
+  **P8,942,000**, but the twenty-two listed items foot to **P10,695,400**. Nothing in
+  the answer key or teaching guide ever uses the 8,942,000, so it appears to be a
+  leftover. The site presents the item list **without** a control total.
+- **Part D is not carried into Part E.** The published answer stops at P6,725,400,
+  treating the interbank transfers as a separate diagnostic. The site keeps that as the
+  headline figure and adds an explicit **Stage E4** showing the fully corrected
+  position, since a student asked for the statement of financial position *after all
+  findings* needs P6,925,400.
 
 ---
 
