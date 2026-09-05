@@ -1,50 +1,61 @@
-/* FAR Study Hub - visual system after the "Learnify" education concept
-   (Ronas IT, dribbble.com/shots/25272282): lavender ground, one big rounded
-   white card, chunky black-bordered blocks in orange / purple / yellow. */
+/* LearnAccounting - visual system applied from the Penpot design
+   "Accounting Edu Website" (Home Page + When Topic is Viewed boards, 1920x1080).
+   Values below are taken from the design's rendered fills and text styles, not
+   sampled by eye: ink #151513, orange #FF5734, yellow #FCCC42, purple #BE94F5,
+   paper #F7F7F5, grey #B1B2B5; Kodchasan 400/700; corner radii 30/20/15/12.5/7.5. */
 
 :root{
-  --lav:#BEB0D2;        /* page ground            */
-  --paper:#F7F7F5;      /* the big app card       */
+  --lav:#C9B8E8;        /* lesson-page ground     */
+  --paper:#F7F7F5;      /* page ground            */
   --white:#FFFFFF;
-  --ink:#0A0A0A;        /* borders + display type */
+  --ink:#151513;        /* borders                */
+  --black:#000000;      /* display type           */
   --grey:#6B6B72;
+  --grey-d:#B1B2B5;     /* design's muted grey    */
   --line:#E4E2DE;
-  --orange:#FC5736;     /* primary action         */
+  --orange:#FF5734;     /* primary action, accent */
   --orange-d:#E33F1F;
-  --purple:#BD94F4;
-  --purple-s:#EDE3FE;
-  --yellow:#FCCC41;
-  --yellow-s:#FFF3CE;
+  --purple:#BE94F5;
+  --purple-s:#D8C1F5;   /* card tint              */
+  --purple-x:#EDE3FE;   /* soft wash              */
+  --yellow:#FCCC42;
+  --yellow-s:#FADF93;   /* card tint              */
+  --yellow-x:#FFF3CE;
+  --coral:#FB9F8B;      /* card tint              */
   --good:#7BD88F;
   --good-s:#E4F7E9;
   --bad:#FFB3A7;
   --bad-s:#FFEAE6;
 
   --b:2px solid var(--ink);
-  --r-lg:34px;
-  --r-md:22px;
-  --r-sm:14px;
+  --r-lg:30px;
+  --r-md:20px;
+  --r-sm:12.5px;
+  --r-xs:7.5px;
   --pop:4px 4px 0 var(--ink);
 
-  --disp:"Outfit",system-ui,sans-serif;
-  --body:"Plus Jakarta Sans",system-ui,sans-serif;
+  --disp:"Kodchasan",system-ui,sans-serif;
+  --body:"Kodchasan",system-ui,sans-serif;
   color-scheme:light;
 }
 
 *{box-sizing:border-box}
 html{-webkit-text-size-adjust:100%}
 body{
-  margin:0;background:var(--lav);color:var(--ink);
+  margin:0;background:var(--paper);color:var(--ink);
   font:16px/1.65 var(--body);
-  padding:22px;
+  padding:0;
 }
+/* the lesson board in the design sits on a lavender ground */
+body.lessonView{background:var(--lav)}
 a{color:var(--orange);text-underline-offset:3px}
 
 /* ---------- the one big card ---------- */
 .app{
-  max-width:1180px;margin:0 auto;background:var(--paper);
-  border-radius:var(--r-lg);overflow:hidden;position:relative;
+  max-width:1920px;margin:0 auto;background:var(--paper);
+  border-radius:0;overflow:hidden;position:relative;
 }
+body.lessonView .app{background:transparent}
 .pad{padding:0 clamp(20px,4vw,52px)}
 
 /* ---------- nav ---------- */
@@ -53,16 +64,16 @@ a{color:var(--orange);text-underline-offset:3px}
   padding:22px clamp(20px,4vw,52px);
   position:sticky;top:0;z-index:40;background:var(--paper);
 }
-.logo{font:800 25px/1 var(--disp);letter-spacing:-.02em;flex:0 0 auto}
+.logo{font:700 clamp(22px,2.08vw,40px)/1 var(--disp);letter-spacing:-.01em;flex:0 0 auto;color:var(--black)}
 .logo i{color:var(--orange);font-style:normal}
 .tabs{display:flex;gap:6px;margin:0 auto;flex-wrap:wrap;justify-content:center}
 .tabs button{
   background:none;border:0;padding:9px 16px;cursor:pointer;
-  font:600 15px var(--body);color:var(--grey);border-radius:999px;
+  font:400 clamp(14px,1.3vw,25px) var(--body);color:var(--black);border-radius:999px;
   position:relative;white-space:nowrap;
 }
-.tabs button:hover{color:var(--ink)}
-.tabs button.on{color:var(--ink);font-weight:700}
+.tabs button:hover{color:var(--orange)}
+.tabs button.on{color:var(--black);font-weight:700}
 .tabs button.on::after{
   content:"";position:absolute;left:16px;right:16px;bottom:1px;
   height:3px;border-radius:3px;background:var(--orange);
@@ -76,17 +87,18 @@ a{color:var(--orange);text-underline-offset:3px}
 
 /* ---------- hero ---------- */
 .hero{position:relative;padding:8px 0 34px;overflow:hidden}
-.hero .inner{position:relative;z-index:2;max-width:700px}
+.hero .inner{position:relative;z-index:2;max-width:min(840px,56%)}
 h1.display{
-  font:800 clamp(38px,5.8vw,66px)/1.04 var(--disp);
-  letter-spacing:-.035em;margin:0 0 18px;
+  font:700 clamp(32px,4.17vw,80px)/1.14 var(--disp);
+  letter-spacing:-.02em;color:var(--black);margin:6px 0 18px;
 }
 h1.display em{color:var(--orange);font-style:normal}
-.sub{font-size:17px;color:var(--grey);margin:0 0 26px;max-width:430px}
+.sub{font:400 clamp(14px,1.56vw,30px)/1.5 var(--body);color:var(--black);
+  margin:0 0 30px;max-width:52ch}
 .cta-row{display:flex;align-items:center;gap:22px;flex-wrap:wrap}
 .btn{
-  background:var(--orange);color:#fff;border:var(--b);border-radius:999px;
-  padding:13px 26px;font:700 15px var(--body);cursor:pointer;
+  border:var(--b);border-radius:999px;background:var(--orange);color:var(--paper);
+  font:700 clamp(13px,1.15vw,22px) var(--body);padding:.6em 1.5em;cursor:pointer;
   transition:transform .12s,box-shadow .12s;
 }
 .btn:hover{transform:translate(-2px,-2px);box-shadow:var(--pop)}
@@ -103,6 +115,11 @@ h1.display em{color:var(--orange);font-style:normal}
 
 /* decorative layer */
 .decor{position:absolute;inset:0;z-index:1;pointer-events:none}
+/* the artwork only has room to sit clear of the headline on wide viewports */
+@media(max-width:1100px){
+  .decor{display:none}
+  .hero .inner{max-width:840px}
+}
 .decor svg{position:absolute}
 
 /* ---------- stat blocks ---------- */
@@ -118,8 +135,8 @@ h1.display em{color:var(--orange);font-style:normal}
   background:var(--white);padding:2px 11px;font:700 10.5px var(--body);
   letter-spacing:.04em;text-transform:uppercase;
 }
-.stat .lbl{font-size:12.5px;color:#3A3A40;margin:12px 0 0}
-.stat .big{font:800 33px/1 var(--disp);letter-spacing:-.03em;margin-top:2px}
+.stat .lbl{font:400 13px var(--body);color:var(--black);margin:10px 0 0}
+.stat .big{font:700 clamp(24px,2.08vw,40px)/1 var(--disp);letter-spacing:-.02em;margin-top:2px;color:var(--black)}
 
 /* ---------- section headings ---------- */
 .kick{
@@ -143,6 +160,24 @@ h4{font:700 16px var(--body);margin:26px 0 8px}
 
 /* ---------- chapter cards ---------- */
 .grid{display:grid;gap:18px;grid-template-columns:repeat(auto-fill,minmax(300px,1fr))}
+/* the design's "Last viewed" rail, divided from "Available now" by a rule */
+.kickRow{display:flex;align-items:baseline;gap:22px}
+.moreLink{
+  background:none;border:0;padding:0;cursor:pointer;color:var(--black);
+  font:400 11.5px var(--body);letter-spacing:.1em;text-transform:uppercase;
+  text-decoration:underline;text-underline-offset:3px;
+}
+.moreLink:hover{color:var(--orange)}
+.rail{display:block}
+.railCol{max-width:360px}
+.grid.one{grid-template-columns:minmax(0,360px)}
+@media(min-width:900px){
+  .rail{display:grid;grid-template-columns:320px minmax(0,1fr);gap:34px;align-items:start}
+  /* the design divides the two columns with a vertical rule */
+  .railMain{border-left:2px solid var(--ink);padding-left:34px;min-width:0}
+  .railCol .kick{margin-top:44px}
+}
+.railMain{min-width:0}
 .ch{
   border:var(--b);border-radius:var(--r-md);background:var(--white);
   padding:20px 22px 18px;text-align:left;font:inherit;color:inherit;
@@ -152,6 +187,7 @@ h4{font:700 16px var(--body);margin:26px 0 8px}
 .ch:hover{transform:translate(-3px,-3px);box-shadow:var(--pop)}
 .ch.a2{background:var(--purple-s)}
 .ch.a3{background:var(--yellow-s)}
+.ch.a4{background:var(--coral)}
 .ch h3{margin:14px 0 8px}
 .ch p{margin:0 0 16px;font-size:14.5px;color:#45454C;flex:1}
 .ch.soon{background:var(--white);cursor:default;opacity:.55}
@@ -168,18 +204,32 @@ h4{font:700 16px var(--body);margin:26px 0 8px}
 
 /* ---------- lesson ---------- */
 .back{
-  background:var(--white);border:var(--b);border-radius:999px;
-  padding:8px 16px;font:700 13px var(--body);cursor:pointer;margin-bottom:18px;
+  border:var(--b);border-radius:999px;background:var(--orange);color:var(--paper);
+  font:700 12.5px var(--body);letter-spacing:.06em;text-transform:uppercase;
+  padding:8px 20px;cursor:pointer;margin:8px 0 18px;
   transition:transform .12s,box-shadow .12s;
 }
 .back:hover{transform:translate(-2px,-2px);box-shadow:var(--pop)}
 /* ---------- lesson layout: chapter map + parts ---------- */
-.lesson{display:grid;grid-template-columns:272px minmax(0,1fr);gap:34px;align-items:start}
+.lesson{display:grid;grid-template-columns:300px minmax(0,1fr);gap:30px;align-items:start}
 .lessonBody{min-width:0}
+.lessonCol{min-width:0;display:flex;flex-direction:column}
+body.lessonView .lessonBody{
+  background:var(--paper);border:var(--b);border-radius:var(--r-md);
+  padding:clamp(18px,2.4vw,34px);
+}
+body.lessonView .lessonHead{
+  background:var(--paper);border:var(--b);border-radius:var(--r-md);
+  padding:clamp(18px,2.4vw,30px);margin-bottom:22px;
+}
 /* min-width:0 so the horizontal strip below 980px can scroll instead of
    forcing the grid — and the page — wider than the viewport */
-.toc{position:sticky;top:96px;min-width:0}
+.toc{position:sticky;top:96px;min-width:0;
+  background:var(--yellow-s);border:var(--b);border-radius:var(--r-md);
+  padding:18px 16px 20px;}
 .tocList{min-width:0}
+.tocProg{margin:0 0 14px}
+.tocProg .pct{margin-top:6px;color:#4A4A50}
 .tocHead{
   font:800 11px var(--body);letter-spacing:.14em;text-transform:uppercase;
   color:var(--grey);margin:24px 0 14px;
@@ -206,15 +256,16 @@ h4{font:700 16px var(--body);margin:26px 0 8px}
 }
 .tocItem.done .dot{background:var(--good)}
 .tocItem.done .t{color:#3A3A40}
-.tocItem.now .dot{background:var(--orange);color:#fff}
-.tocItem.now .t{color:var(--ink);font-weight:800}
+.tocItem.now .dot{background:var(--orange);color:#fff;border-color:var(--ink)}
+.tocItem.now .t{color:var(--black);font-weight:700}
+.tocItem.now{background:var(--white);border-radius:999px;padding-right:14px}
 .tocItem.lock{cursor:default}
-.tocItem.lock .dot{background:var(--paper);border-color:#BFBFC6;color:#A6A6AE}
-.tocItem.lock .t{color:#A6A6AE}
+.tocItem.lock .dot{background:var(--white);border-color:var(--ink);color:#8B8B92}
+.tocItem.lock .t{color:#6E6E74}
 .tocItem.end .dot{background:var(--yellow)}
-.tocItem:not(.lock):hover{background:var(--purple-s)}
-.tocItem.viewing:not(.lock){background:var(--purple-s)}
-.tocItem.viewing .dot{box-shadow:0 0 0 4px var(--purple-s)}
+.tocItem:not(.lock):hover{background:rgba(255,255,255,.6);border-radius:999px}
+.tocItem.viewing:not(.lock){background:var(--white);border-radius:999px}
+.tocItem.viewing .dot{box-shadow:0 0 0 3px rgba(255,255,255,.85)}
 
 .sec{
   border:var(--b);border-radius:var(--r-md);background:var(--white);
@@ -261,7 +312,7 @@ td{border-top:1px solid var(--line);padding:11px 13px;vertical-align:top;min-wid
 tbody tr:nth-child(even) td{background:#FAFAF8}
 ul,ol{padding-left:22px;margin:12px 0}
 li{margin:7px 0}
-.outcomes{background:var(--purple-s);border:var(--b);border-radius:var(--r-md);padding:18px 22px;margin:18px 0}
+.outcomes{background:var(--purple-s);border:var(--b);border-radius:var(--r-sm);padding:18px 22px;margin:18px 0}
 .outcomes ul{margin-bottom:0}
 
 /* ---------- knowledge check ---------- */
@@ -351,7 +402,7 @@ select{
 /* below the two-column breakpoint the map becomes a horizontal timeline strip */
 @media(max-width:980px){
   .lesson{grid-template-columns:1fr;gap:0}
-  .toc{position:sticky;top:70px;z-index:20;background:var(--paper);padding-bottom:12px}
+  .toc{position:sticky;top:70px;z-index:20;background:var(--yellow-s);padding:14px 14px 12px}
   .tocHead{margin:18px 0 10px}
   .tocList{flex-direction:row;gap:10px;overflow-x:auto;padding-bottom:4px}
   .tocList::before{left:22px;right:22px;top:16px;bottom:auto;width:auto;height:2px}
@@ -361,10 +412,10 @@ select{
 }
 
 @media(max-width:760px){
-  body{padding:10px}
-  .app{border-radius:26px}
   .nav{flex-wrap:wrap;gap:10px;padding-bottom:14px}
-  .tabs{order:3;width:100%;margin:0;justify-content:flex-start}
-  .navpill{margin-left:auto}
+  .tabs{order:3;width:100%;margin:0;justify-content:flex-start;gap:2px}
+  .tabs button{padding:8px 10px}
   .fcFace .txt{font-size:20px}
+  .rail,.railCol,.grid.one{max-width:none}
+  .grid.one{grid-template-columns:minmax(0,1fr)}
 }

@@ -1,33 +1,57 @@
-# FAR Study Hub
+# LearnAccounting
 
 Scaffolded study site for Financial Accounting and Reporting, aligned to the **CPALE 2029 Table of Specifications**.
 Built for Tarlac State University FAR students.
 
 ## Visual system
 
-The look follows the "Learnify" education concept by Ronas IT
-(dribbble.com/shots/25272282): a lavender ground with the whole site sitting in
-one large rounded white card, chunky 2px black borders on every block, flat
-orange / purple / yellow fills, and oversized display type with one accent word.
-
-Palette, sampled from the reference:
+The look is applied from the Penpot file **"Accounting Edu Website"** (boards
+*Home Page* and *When Topic is Viewed*, 1920x1080). Values below are taken from the
+design's rendered fills and text styles rather than sampled by eye.
 
 | Token | Value | Use |
 | --- | --- | --- |
-| `--lav` | `#BEB0D2` | page ground behind the card |
-| `--paper` | `#F7F7F5` | the app card |
-| `--ink` | `#0A0A0A` | borders and display type |
-| `--orange` | `#FC5736` | primary action, accent word |
-| `--purple` | `#BD94F4` | secondary blocks, flashcard reverse |
-| `--yellow` | `#FCCC41` | knowledge checks, score card |
+| `--paper` | `#F7F7F5` | page ground, full bleed |
+| `--lav` | `#C9B8E8` | ground behind the lesson board only |
+| `--ink` | `#151513` | 2px borders on every block |
+| `--black` | `#000000` | display and nav type |
+| `--orange` | `#FF5734` | accent word, primary action, current part |
+| `--yellow` | `#FCCC42` | knowledge checks, score card |
+| `--purple` | `#BE94F5` | flashcard reverse, outcomes panel |
+| `--yellow-s` | `#FADF93` | chapter-map panel, card tint |
+| `--purple-s` | `#D8C1F5` | card tint |
+| `--coral` | `#FB9F8B` | card tint |
+| `--grey-d` | `#B1B2B5` | muted rules |
 
-Type is **Outfit** (display, 800) over **Plus Jakarta Sans** (body), both from
-Google Fonts. Interactive blocks lift on hover into a hard `4px 4px 0` offset
-shadow rather than a soft blur.
+Type is **Kodchasan** (400 and 700) throughout, from Google Fonts. Corner radii are the
+design's: 30 / 20 / 15 / 12.5 / 7.5px. Interactive blocks lift into a hard `4px 4px 0`
+offset shadow rather than a soft blur.
 
-The layout, palette and component shapes follow the reference. The decorative
-artwork (pencil, stars, cloud, arcs) is drawn fresh as inline SVG in `app.js`
-rather than copied from the shot, so none of the original illustration is reused.
+Sizes are expressed as `vw` against the design's 1920px board, so the page reproduces the
+design exactly at 1920 and scales proportionally below it: the display line is `4.17vw`
+(80px at 1920), the logo `2.08vw` (40px), nav links `1.3vw` (25px), the subtitle `1.56vw`
+(30px), the primary button `1.15vw` (22px). Each carries a `clamp()` floor so small
+viewports stay readable.
+
+The layout, palette and component shapes follow the design. The decorative artwork
+(pencil, stars, cloud, arcs) is drawn fresh as inline SVG in `app.js` in the design's
+hues rather than exported from the file.
+
+### Where the build departs from the design, and why
+
+- **Placeholder copy is not reproduced.** The boards carry lorem text - "Subtitle or
+  tagline or phrases here", "Title of Part x", "TOS XX", "Discussion here". The real
+  chapter content is used instead; only the structure is taken.
+- **The stat figures are computed, not copied.** The design shows +94 / +264 / +167;
+  the page sums the actual chapters.
+- **"About Us" is a stub.** The design's fourth nav item has no source content, so it
+  ships as a "Coming soon" page.
+- **The nav "Continue" pill was removed** to match the design's nav, which is the logo
+  plus four links. The hero's *Start Studying* button and the *Last viewed* card cover
+  the same need.
+- **Responsive behaviour is not in the design**, which is desktop-only at 1920. The
+  existing breakpoints are kept: below 980px the chapter map becomes a horizontal
+  timeline strip, below 760px the nav wraps.
 
 ## Tabs
 

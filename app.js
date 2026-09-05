@@ -1,4 +1,4 @@
-/* FAR Study Hub - scaffolded lesson engine, flashcards, quiz.
+/* LearnAccounting - scaffolded lesson engine, flashcards, quiz.
    Content lives in content/*.js and self-registers via FARHub.addChapter(). */
 (function () {
   "use strict";
@@ -42,6 +42,17 @@
     store[chId] = store[chId] || { cleared: [] };
     return store[chId].cleared;
   }
+  /* The design's home page opens with a "Last viewed" rail, so the id of the
+     chapter most recently opened is remembered alongside the progress. */
+  function markSeen(chId) {
+    if (store.__last === chId) return;
+    store.__last = chId; save();
+  }
+  function lastSeen() {
+    var id = store.__last;
+    return id && BY_ID[id] ? BY_ID[id] : null;
+  }
+
   function markCleared(chId, secId) {
     var d = done(chId);
     if (d.indexOf(secId) === -1) { d.push(secId); save(); }
@@ -93,33 +104,33 @@
     return "<svg width='" + size + "' height='" + size + "' viewBox='0 0 100 100' " +
       "style='top:" + top + ";right:" + right + "' aria-hidden='true'>" +
       "<path d='M50 4 C56 34 66 44 96 50 C66 56 56 66 50 96 C44 66 34 56 4 50 C34 44 44 34 50 4 Z' " +
-      "fill='" + fill + "' stroke='#0A0A0A' stroke-width='4' stroke-linejoin='round'/></svg>";
+      "fill='" + fill + "' stroke='#151513' stroke-width='4' stroke-linejoin='round'/></svg>";
   }
   function heroDecor() {
     var d = el("div", "decor");
     d.innerHTML =
       /* sweeping outline arcs */
       "<svg width='620' height='520' viewBox='0 0 620 520' style='top:-40px;right:-90px' aria-hidden='true'>" +
-        "<circle cx='330' cy='250' r='236' fill='none' stroke='#0A0A0A' stroke-width='1.5' opacity='.16'/>" +
-        "<circle cx='300' cy='276' r='188' fill='none' stroke='#0A0A0A' stroke-width='1.5' opacity='.12'/>" +
+        "<circle cx='330' cy='250' r='236' fill='none' stroke='#151513' stroke-width='1.5' opacity='.16'/>" +
+        "<circle cx='300' cy='276' r='188' fill='none' stroke='#151513' stroke-width='1.5' opacity='.12'/>" +
       "</svg>" +
       /* pencil */
       "<svg width='300' height='300' viewBox='0 0 300 300' style='top:120px;right:60px' aria-hidden='true'>" +
         "<g transform='rotate(-34 150 150)'>" +
-          "<rect x='72' y='128' width='168' height='46' rx='10' fill='#BD94F4' stroke='#0A0A0A' stroke-width='4'/>" +
-          "<path d='M72 128 L36 151 L72 174 Z' fill='#FFFFFF' stroke='#0A0A0A' stroke-width='4' stroke-linejoin='round'/>" +
-          "<path d='M52 140 L36 151 L52 162 Z' fill='#0A0A0A'/>" +
-          "<rect x='222' y='128' width='26' height='46' rx='9' fill='#FCCC41' stroke='#0A0A0A' stroke-width='4'/>" +
+          "<rect x='72' y='128' width='168' height='46' rx='10' fill='#BE94F5' stroke='#151513' stroke-width='4'/>" +
+          "<path d='M72 128 L36 151 L72 174 Z' fill='#FFFFFF' stroke='#151513' stroke-width='4' stroke-linejoin='round'/>" +
+          "<path d='M52 140 L36 151 L52 162 Z' fill='#151513'/>" +
+          "<rect x='222' y='128' width='26' height='46' rx='9' fill='#FCCC42' stroke='#151513' stroke-width='4'/>" +
         "</g>" +
       "</svg>" +
       /* cloud */
       "<svg width='128' height='78' viewBox='0 0 128 78' style='top:262px;right:12px' aria-hidden='true'>" +
         "<path d='M30 66 C12 66 4 55 8 44 C12 33 25 30 32 33 C34 16 50 8 64 12 C77 15 84 26 84 36 " +
-        "C100 32 116 42 116 54 C116 62 109 66 100 66 Z' fill='#FFFFFF' stroke='#0A0A0A' stroke-width='4' stroke-linejoin='round'/>" +
+        "C100 32 116 42 116 54 C116 62 109 66 100 66 Z' fill='#FFFFFF' stroke='#151513' stroke-width='4' stroke-linejoin='round'/>" +
       "</svg>" +
-      star(66, "56px", "330px", "#FCCC41") +
-      star(30, "232px", "268px", "#FCCC41") +
-      star(22, "18px", "196px", "#BD94F4");
+      star(66, "56px", "330px", "#FCCC42") +
+      star(30, "232px", "268px", "#FCCC42") +
+      star(22, "18px", "196px", "#FF5734");
     return d;
   }
 
@@ -162,13 +173,13 @@
     var hero = el("div", "hero");
     hero.appendChild(heroDecor());
     var inner = el("div", "inner");
-    inner.appendChild(el("h1", "display", "Understand FAR,<br>don't just <em>memorise</em>"));
+    inner.appendChild(el("h1", "display", "Understand <em>Accounting</em>,<br>not simply memorizing"));
     inner.appendChild(el("p", "sub",
       "Scaffolded lessons built from your lecture handouts and aligned to the " +
       "CPALE 2029 Table of Specifications. Every part ends in a question you must " +
       "clear before the next one opens."));
     var row = el("div", "cta-row");
-    var go1 = el("button", "btn", "Start studying");
+    var go1 = el("button", "btn", "Start Studying");
     go1.onclick = function () { go("lesson", nextUp().id); };
     var go2 = el("button", "link", "Jump to flashcards ↗");
     go2.onclick = function () { go("cards"); };
@@ -191,8 +202,34 @@
     hero.appendChild(stats);
     root.appendChild(hero);
 
+    /* The design sets a single "Last viewed" card beside the "Available now"
+       grid, divided by a vertical rule. With nothing viewed yet the rail
+       collapses and the grid takes the full width. */
+    var last = lastSeen();
+    var main = root;
+    if (last) {
+      var rail = el("div", "rail");
+      var lastCol = el("div", "railCol");
+      lastCol.appendChild(el("div", "kick", "Last viewed"));
+      var lastGrid = el("div", "grid one");
+      lastGrid.appendChild(chapterCard(last, CHAPTERS.indexOf(last)));
+      lastCol.appendChild(lastGrid);
+      rail.appendChild(lastCol);
+      main = el("div", "railMain");
+      rail.appendChild(main);
+      root.appendChild(rail);
+    }
+
     /* available chapters */
-    root.appendChild(el("div", "kick", "Available now"));
+    var kick = el("div", "kick kickRow");
+    kick.appendChild(el("span", null, "Available now"));
+    var more = el("button", "moreLink", "Explore more ↗");
+    more.onclick = function () {
+      var soon = document.getElementById("soon");
+      if (soon) soon.scrollIntoView({ block: "start" });
+    };
+    kick.appendChild(more);
+    main.appendChild(kick);
 
     /* Chapters carrying the same `group` are rendered together under one
        heading, so a topic split across several chapters still reads as one. */
@@ -211,37 +248,40 @@
         var head = el("div", "groupHead");
         head.appendChild(el("h3", null, run.group));
         head.appendChild(el("span", "groupCount", n + " chapters"));
-        root.appendChild(head);
+        main.appendChild(head);
       }
       var grid = el("div", "grid" + (run.group ? " grouped" : ""));
       run.items.forEach(function (it) {
         grid.appendChild(chapterCard(it.c, it.i));
       });
-      root.appendChild(grid);
+      main.appendChild(grid);
     });
 
     function chapterCard(c, i) {
       var cleared = done(c.id).length, total = c.sections.length;
       var pct = total ? Math.round(cleared / total * 100) : 0;
-      var card = el("button", "ch" + (i % 3 === 1 ? " a2" : i % 3 === 2 ? " a3" : ""));
+      var hue = ["", " a3", " a2", " a4"][i % 4];   /* white, yellow, purple, coral */
+      var card = el("button", "ch" + hue);
       card.appendChild(el("span", "chip", "TOS " + c.code));
       card.appendChild(el("h3", null, c.title));
       card.appendChild(el("p", null, c.blurb));
       var bar = el("div", "bar"); var fill = el("i");
       fill.style.width = pct + "%"; bar.appendChild(fill);
       card.appendChild(bar);
-      card.appendChild(el("div", "pct", cleared + " of " + total + " parts complete"));
+      card.appendChild(el("div", "pct", pct + "% completed"));
       var meta = el("div", "meta");
       meta.innerHTML = "<span><b>" + (c.flashcards || []).length + "</b> cards</span>" +
         "<span><b>" + (c.quiz || []).length + "</b> quiz items</span>" +
-        "<span>~<b>" + c.minutes + "</b> min</span>";
+        "<span><b>" + c.minutes + "</b> mins</span>";
       card.appendChild(meta);
       card.onclick = function () { go("lesson", c.id); };
       return card;
     }
 
     /* roadmap */
-    root.appendChild(el("div", "kick", "Coming soon"));
+    var soonKick = el("div", "kick", "Coming soon");
+    soonKick.id = "soon";
+    main.appendChild(soonKick);
     var g2 = el("div", "grid");
     FARHub.roadmap.forEach(function (r) {
       var c = el("div", "ch soon");
@@ -251,7 +291,7 @@
                                        : "Being written from the FAR lecture handouts."));
       g2.appendChild(c);
     });
-    root.appendChild(g2);
+    main.appendChild(g2);
   }
 
   /* ---------------- LESSON (scaffolded) ---------------- */
@@ -259,16 +299,18 @@
     var ch = BY_ID[chId];
     if (!ch) { go("home"); return; }
 
-    var top = el("div", null);
-    var back = el("button", "back", "← All chapters");
-    back.onclick = function () { go("home"); };
-    top.appendChild(back);
-    root.appendChild(top);
+    markSeen(chId);
 
-    root.appendChild(el("span", "chip", "TOS " + ch.code));
-    if (ch.group) root.appendChild(el("div", "groupTag", ch.group));
-    root.appendChild(el("h2", null, ch.title));
-    root.appendChild(el("p", "lede", ch.blurb));
+    var back = el("button", "back", "All chapters");
+    back.onclick = function () { go("home"); };
+    root.appendChild(back);
+
+    /* The design puts the title block in its own card above the two columns. */
+    var head = el("div", "lessonHead");
+    head.appendChild(el("span", "chip", "TOS " + ch.code));
+    if (ch.group) head.appendChild(el("div", "groupTag", ch.group));
+    head.appendChild(el("h2", null, ch.title));
+    head.appendChild(el("p", "lede", ch.blurb));
 
     if (ch.outcomes && ch.outcomes.length) {
       var o = el("div", "outcomes");
@@ -276,29 +318,37 @@
       var ul = el("ul");
       ch.outcomes.forEach(function (x) { ul.appendChild(el("li", null, x)); });
       o.appendChild(ul);
-      root.appendChild(o);
+      head.appendChild(o);
     }
-
+    /* progress lives at the top of the chapter map, as in the design */
+    var progWrap = el("div", "tocProg");
+    var progTxt = el("div", "pct");
     var progBar = el("div", "bar"), progFill = el("i");
     progBar.appendChild(progFill);
-    var progTxt = el("div", "pct");
-    root.appendChild(progBar); root.appendChild(progTxt);
+    progWrap.appendChild(progTxt);
+    progWrap.appendChild(progBar);
+    var progCount = el("div", "pct");
+    progWrap.appendChild(progCount);
 
     /* two-column body: chapter map on the left, the parts themselves on the right */
     var layout = el("div", "lesson");
     var toc = el("aside", "toc");
     var tocList = el("div", "tocList");
     var tocHead = el("div", "tocHead", "In this chapter");
+    toc.appendChild(progWrap);
     toc.appendChild(tocHead);
     toc.appendChild(tocList);
     var host = el("div", "lessonBody");
-    layout.appendChild(toc); layout.appendChild(host);
+    var col = el("div", "lessonCol");
+    col.appendChild(head); col.appendChild(host);
+    layout.appendChild(toc); layout.appendChild(col);
     root.appendChild(layout);
 
     function refreshProgress() {
       var n = done(chId).length, t = ch.sections.length;
       progFill.style.width = Math.round(n / t * 100) + "%";
-      progTxt.textContent = n + " of " + t + " parts complete";
+      progTxt.textContent = Math.round(n / t * 100) + "% completed";
+      progCount.textContent = n + " of " + t + " Parts Completed";
       syncPill();
     }
 
@@ -497,6 +547,12 @@
     }
 
     draw();
+  }
+
+  /* ---------------- ABOUT (stub) ---------------- */
+  function viewAbout(root) {
+    root.appendChild(el("h2", null, "About <em>Us</em>"));
+    root.appendChild(el("p", "lede", "Coming soon."));
   }
 
   /* ---------------- FLASHCARDS ---------------- */
@@ -698,9 +754,11 @@
       var t = b.dataset.tab;
       b.classList.toggle("on", t === tab || (tab === "lesson" && t === "home"));
     });
+    document.body.classList.toggle("lessonView", tab === "lesson");
     if (tab === "lesson") viewLesson(root, h[1]);
     else if (tab === "cards") viewCards(root);
     else if (tab === "quiz") viewQuiz(root);
+    else if (tab === "about") viewAbout(root);
     else viewHome(root);
     syncPill();
     if (tab !== "lesson") window.scrollTo(0, 0);
