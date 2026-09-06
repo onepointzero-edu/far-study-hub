@@ -99,13 +99,13 @@
   }
 
   /* ---------------- decorative SVG ---------------- */
-  /* Original shapes in the reference's flat, black-outlined style. */
-  /* The hero artwork is the illustration from the Penpot file, exported as
-     assets/hero-illustration.svg and scaled down to fit the page. */
+  /* The board's decorative shapes, exported from Penpot as one SVG. They sit on a
+     pinned layer behind every other element, so they hold still while the page
+     scrolls and never intercept a click meant for a card. */
   function heroDecor() {
     var d = el("div", "decor");
     var img = document.createElement("img");
-    img.src = "assets/hero-illustration.svg";
+    img.src = "assets/hero-decor.svg";
     img.alt = "";
     img.setAttribute("aria-hidden", "true");
     d.appendChild(img);
@@ -152,16 +152,15 @@
     hero.appendChild(heroDecor());
     var inner = el("div", "inner");
     inner.appendChild(el("h1", "display", "Understand <em>Accounting</em>,<br>not simply memorizing"));
+    /* board copy: two lines, 15/400 */
     inner.appendChild(el("p", "sub",
-      "Scaffolded lessons built from your lecture handouts and aligned to the " +
-      "CPALE 2029 Table of Specifications. Every part ends in a question you must " +
-      "clear before the next one opens."));
+      "Your All in One Financial Accounting and Reporting Reviewer<br>" +
+      "Built for Accountancy Students and CPALE Reviewers"));
+    /* the board carries a single call to action */
     var row = el("div", "cta-row");
     var go1 = el("button", "btn", "Start Studying");
     go1.onclick = function () { go("lesson", nextUp().id); };
-    var go2 = el("button", "link", "Jump to flashcards ↗");
-    go2.onclick = function () { go("cards"); };
-    row.appendChild(go1); row.appendChild(go2);
+    row.appendChild(go1);
     inner.appendChild(row);
     hero.appendChild(inner);
 
@@ -190,7 +189,7 @@
       var lastCol = el("div", "railCol");
       lastCol.appendChild(el("div", "kick", "Last viewed"));
       var lastGrid = el("div", "grid one");
-      lastGrid.appendChild(chapterCard(last, CHAPTERS.indexOf(last)));
+      lastGrid.appendChild(chapterCard(last, CHAPTERS.indexOf(last), { blurb: false }));
       lastCol.appendChild(lastGrid);
       rail.appendChild(lastCol);
       main = el("div", "railMain");
@@ -207,7 +206,7 @@
 
     var grid = el("div", "grid preview");
     previewChapters(last, last ? 3 : 4).forEach(function (it) {
-      grid.appendChild(chapterCard(it.c, it.i));
+      grid.appendChild(chapterCard(it.c, it.i, { blurb: false }));
     });
     main.appendChild(grid);
   }
@@ -223,14 +222,17 @@
     return open.concat(closed).slice(0, n);
   }
 
-  function chapterCard(c, i) {
+  /* `opts.blurb === false` drops the subtitle: home is a teaser - both the
+     "Last viewed" card and the preview row carry the title alone, and the
+     blurb waits for the All chapters page. */
+  function chapterCard(c, i, opts) {
     var cleared = done(c.id).length, total = c.sections.length;
     var pct = total ? Math.round(cleared / total * 100) : 0;
     var hue = ["", " a3", " a2", " a4"][i % 4];   /* white, yellow, purple, coral */
     var card = el("button", "ch" + hue);
     card.appendChild(el("span", "chip", "TOS " + c.code));
     card.appendChild(el("h3", null, c.title));
-    card.appendChild(el("p", null, c.blurb));
+    if (!opts || opts.blurb !== false) card.appendChild(el("p", null, c.blurb));
     var bar = el("div", "bar"); var fill = el("i");
     fill.style.width = pct + "%"; bar.appendChild(fill);
     card.appendChild(bar);
@@ -766,8 +768,23 @@
     if (tab !== "lesson") window.scrollTo(0, 0);
   }
 
+  /* the nav is pinned, so every sticky top offset and anchor scroll-margin is
+     measured from its real height - which changes when the tab row wraps */
+  function syncNavHeight() {
+    var nav = document.querySelector(".nav");
+    if (!nav) return;
+    var h = Math.round(nav.getBoundingClientRect().height);
+    document.documentElement.style.setProperty("--navh", h + "px");
+  }
+
   window.addEventListener("hashchange", route);
+  window.addEventListener("resize", syncNavHeight);
   window.addEventListener("DOMContentLoaded", function () {
+    syncNavHeight();
+    if (window.ResizeObserver) {
+      var nav = document.querySelector(".nav");
+      if (nav) new ResizeObserver(syncNavHeight).observe(nav);
+    }
     document.querySelectorAll(".tabs button").forEach(function (b) {
       b.onclick = function () { go(b.dataset.tab); };
     });

@@ -5,9 +5,10 @@ Built for Tarlac State University FAR students.
 
 ## Visual system
 
-The look is applied from the Penpot file **"Accounting Edu Website"** (boards
-*Home Page* and *When Topic is Viewed*, 1920x1080). Values below are taken from the
-design's rendered fills and text styles rather than sampled by eye.
+The look is applied from the Penpot file **"Accounting Edu Website"**. The *Home Page*
+board is **1440x1024** with a **1198px content column** and 121px side margins; the
+*When Topic is Viewed* board is still 1920 wide. Values below are read out of the file
+itself (over Penpot's MCP endpoint) rather than sampled by eye.
 
 | Token | Value | Use |
 | --- | --- | --- |
@@ -18,34 +19,44 @@ design's rendered fills and text styles rather than sampled by eye.
 | `--orange` | `#FF5734` | accent word, primary action, current part |
 | `--yellow` | `#FCCC42` | knowledge checks, score card |
 | `--purple` | `#BE94F5` | flashcard reverse, outcomes panel |
-| `--yellow-s` | `#FADF93` | chapter-map panel, card tint |
-| `--purple-s` | `#D8C1F5` | card tint |
-| `--coral` | `#FB9F8B` | card tint |
-| `--grey-d` | `#B1B2B5` | muted rules |
+| `--yellow-s` | `#FADF93` | chapter-map panel |
+| `--yellow-50` | `#FDE59D` | chapter card tint |
+| `--purple-50` | `#DEC5FA` | chapter card tint |
+| `--orange-50` | `#FDAB95` | chapter card tint |
+| `--grey-d` | `#B1B2B5` | muted rules, decor rings |
 
-Type is **Kodchasan** (400 and 700) throughout, from Google Fonts. Corner radii are the
-design's: 30 / 20 / 15 / 12.5 / 7.5px. Interactive blocks lift into a hard `4px 4px 0`
-offset shadow rather than a soft blur.
+The three card tints are the board's `#FCCC42` / `#BE94F5` / `#FF5734` drawn at 50%
+opacity; they are pre-resolved against the paper ground so the cards stay flat.
 
-Sizes are expressed as `vw` against the design's 1920px board, so the page reproduces the
-design exactly at 1920 and scales proportionally below it: the display line is `4.17vw`
-(80px at 1920), the logo `2.08vw` (40px), nav links `1.3vw` (25px), the subtitle `1.56vw`
-(30px), the primary button `1.15vw` (22px). Each carries a `clamp()` floor so small
-viewports stay readable.
+Type is **Kodchasan** (400 and 700) from Google Fonts, with one exception: the three
+hero counters are **Google Sans Code** 30/600, which is what the board specifies.
+Home-page blocks use the board's flat 30px radius and 3px borders. Interactive blocks
+lift into a hard `4px 4px 0` offset shadow rather than a soft blur.
 
-The layout, palette and component shapes follow the design. The decorative artwork
-(pencil, stars, cloud, rings) is **the illustration from the Penpot file**, exported to
-`assets/hero-illustration.svg` and scaled down to suit the page - the geometry is the
-original, only the display size changed.
+Home-page geometry is taken from the board directly: nav bar 50px with the logo inset
+62px and the links flush right; headline 50/700 at line-height 1.2; subtitle 15/400;
+one 150x50 call to action; stat cards 190x140 with an 8px gap; chapter cards 250x205
+sitting at content-x 0 / 287 / 554 / 821; footer rule across the full width.
 
-One thing had to be rebuilt on export: Penpot decomposes a stroked ellipse into a
-filled disc plus a heavy outline, which renders as two grey discs outside the editor.
-The two rings keep their original centres and radii but are re-declared as
-`fill:none` with a thin `#B1B2B5` stroke, which is what the design shows.
+The decorative artwork (two rings, three stars, pencil, cloud) is exported from the
+board as `assets/hero-decor.svg` - original geometry, unscaled. It sits on a pinned
+layer (`position:fixed`, `z-index:0`, `pointer-events:none`) that recreates the board's
+1440-wide coordinate space centred on the content column, so it holds still while the
+page scrolls and never intercepts a click meant for a card. It is home-page only and
+hidden below 900px.
 
-The header is **static** - it scrolls away with the page. The chapter map on a lesson
-page is still sticky; note that this needs no `overflow:hidden` on any ancestor, since
-that silently disables `position:sticky`.
+Two things had to be repaired on export. Penpot's `generateMarkup` emits every shape
+twice - nested inside its parent group and again flattened as a top-level sibling -
+and the double-draw wrecks boolean shapes; the flattened duplicates are deleted. And a
+boolean's operands are geometry, not artwork: the `#B1B2B5` bar inside the cloud's
+Union does not paint in the board and must not be carried over.
+
+The header is **pinned** - `position:sticky; top:0`, so it stays at the top of the
+window while the page scrolls. Its height changes when the tab row wraps (50px wide,
+taller on narrow screens), so `app.js` measures it and publishes the value as `--navh`;
+every sticky offset and anchor `scroll-margin-top` is derived from that rather than
+hardcoded. The chapter map on a lesson page is sticky below it. Note this needs no
+`overflow:hidden` on any ancestor, since that silently disables `position:sticky`.
 
 ### Where the build departs from the design, and why
 
@@ -59,13 +70,15 @@ that silently disables `position:sticky`.
 - **The nav "Continue" pill was removed** to match the design's nav, which is the logo
   plus four links. The hero's *Start Studying* button and the *Last viewed* card cover
   the same need.
-- **Type is set at the previous version's scale**, not the 1920 board's. Rendered at
-  the design's own ratios the page read as oversized at ordinary window widths, so the
-  sizes, radii, padding and 1180px content width from before the redesign are kept and
-  only the palette, typeface and layout are taken from the file.
-- **Responsive behaviour is not in the design**, which is desktop-only at 1920. The
-  existing breakpoints are kept: below 980px the chapter map becomes a horizontal
-  timeline strip, below 760px the nav wraps.
+- **Home cards show the title only.** The board's cards carry the chapter title and no
+  blurb, so `chapterCard()` takes `{ blurb: false }` on the home row and the "Last
+  viewed" card. The All chapters page still shows the subtitle.
+- **Lesson prose is capped at a 640px measure** (`--measure`). Unconstrained, the wider
+  board runs running text to ~102 characters a line. Note `ch` units mislead badly in
+  Kodchasan - its `0` is ~11.8px against an ~8px average glyph - so the cap is in px.
+- **Responsive behaviour is not in the design**, which is desktop-only. The existing
+  breakpoints are kept: below 980px the chapter map becomes a horizontal timeline
+  strip, below 760px the nav wraps.
 
 ## Tabs
 
